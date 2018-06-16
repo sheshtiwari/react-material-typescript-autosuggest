@@ -8,6 +8,11 @@ import withStyles, {
 } from '@material-ui/core/styles/withStyles';
 
 const styles: StyleRulesCallback = theme => ({
+  container: {
+    margin: 'auto',
+    maxWidth: '60%',
+    
+  },
   gridItem: {
     backgroundColor: 'blue',
     color: 'red',
@@ -16,9 +21,9 @@ const styles: StyleRulesCallback = theme => ({
 });
 
 // define the State
-interface IState  {
+interface IState {
   open: boolean;
-};
+}
 
 // namespace used to import props with styles
 /* tslint:disable:no-namespace */
@@ -38,12 +43,12 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
     // assign this.props.classes to classes
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
-        <Grid container={true} spacing={24}>
-          <Grid item={true} xs={12}>
+      <div className={classes.container}>
+        <Grid className={classes.grid} container={true} spacing={24}>
+          <Grid item={true} xs={12} className={classes.gridItem}>
             <div>Grid Item 1</div>
           </Grid>
-          <Grid item={true} xs={12}>
+          <Grid item={true} xs={12} className={classes.gridItem}>
             <div>Grid Item 2</div>
           </Grid>
         </Grid>

@@ -14,8 +14,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <div style={appStyles.title}>
-          {' '}
-          React Typescript Material-UI Autosuggest
+          <p>React Typescript Material-UI Autosuggest</p>
           <CreateMetaData />
         </div>
       </div>
