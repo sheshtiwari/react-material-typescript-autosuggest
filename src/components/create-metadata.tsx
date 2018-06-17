@@ -35,7 +35,7 @@ const styles: StyleRulesCallback = theme => ({
   },
   gridItem: {
     color: '#b6b6b6',
-    padding: 8
+    padding: 0
   },
   header: {
     background: '#13354E',
@@ -45,6 +45,9 @@ const styles: StyleRulesCallback = theme => ({
     lineHeight: '24px',
     padding: 7,
     verticalAlign: 'middle'
+  },
+  textfield: {
+    background: '#fff'
   }
 });
 
@@ -70,12 +73,14 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
       image: '',
       name: '',
       sameAs: '',
-      type: "thing",
+      type: 'thing',
       url: ''
     }
   };
 
   public handleFormChange = (event: any) => {
+    /*tslint:disable:no-console */
+    console.log(event);
     const form = Object.assign({}, this.state.form);
     if (form.hasOwnProperty(event.target.name)) {
       form[event.target.name] = event.target.value;
@@ -143,7 +148,7 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
             <Grid item={true} xs={12} className={classes.gridItem}>
               <div>
                 <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="schema">Schema</InputLabel>
+                  <InputLabel htmlFor="schema">Type</InputLabel>
                   <Select
                     value={this.state.form.type}
                     onChange={this.handleFormChange}
@@ -151,7 +156,7 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
                       id: 'type',
                       name: 'type'
                     }}
-                    style={{ width: 87 }}
+                    style={{ width: 187 }}
                   >
                     <MenuItem value="">
                       <em>None</em>
@@ -164,16 +169,17 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
               </div>
             </Grid>
             <Grid item={true} xs={12} className={classes.gridItem}>
-              <div>
+              <div style={{width: "100%"}}>
                 <SearchItem
-                  textFieldValue={this.state.form.name || ''}
-                  handleInputChange={this.handleFormChange}
+                  textFieldValue={this.state.form.name}
+                  handleFormChange={this.handleFormChange}
+
                 />
               </div>
             </Grid>
-            <Grid item={true} xs={12} className={classes.griditem}>
+            <Grid item={true} xs={12} className={classes.gridItem}>
               <TextField
-                style={{ width: '80%' }}
+                fullWidth={true}
                 id="description"
                 name="description"
                 className={classes.textfield}
@@ -182,8 +188,9 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
                 value={this.state.form.description}
               />
             </Grid>
-            <Grid item={true} xs={6} className={classes.griditem}>
+            <Grid item={true} xs={6} className={classes.gridItem}>
               <TextField
+                fullWidth={true}
                 id="image"
                 name="image"
                 className={classes.textfield}
@@ -192,8 +199,9 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
                 value={this.state.form.image}
               />
             </Grid>
-            <Grid item={true} xs={6} className={classes.griditem}>
+            <Grid item={true} xs={6} className={classes.gridItem}>
               <TextField
+              fullWidth={true}
                 id="sameAs"
                 name="sameAs"
                 className={classes.textfield}
@@ -202,8 +210,9 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
                 value={this.state.form.sameAs}
               />
             </Grid>
-            <Grid item={true} xs={6} className={classes.griditem}>
+            <Grid item={true} xs={6} className={classes.gridItem}>
               <TextField
+              fullWidth={true}
                 id="alternateName"
                 name="alternateName"
                 className={classes.textfield}
@@ -212,8 +221,9 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
                 value={this.state.form.alternateName}
               />
             </Grid>
-            <Grid item={true} xs={6} className={classes.griditem}>
+            <Grid item={true} xs={6} className={classes.gridItem}>
               <TextField
+              fullWidth={true}
                 id="url"
                 name="url"
                 className={classes.textfield}
@@ -225,8 +235,13 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
             <Grid
               item={true}
               xs={12}
-              className={classes.griditem}
-              style={{ textAlign: 'right' }}
+              className={classes.gridItem}
+              style={{
+                marginBottom: 16,
+                marginRight: 16,
+                marginTop: 16,
+                textAlign: 'right'
+              }}
             >
               <Button onClick={this.cancel} className={classes.buttonCancel}>
                 CANCEL

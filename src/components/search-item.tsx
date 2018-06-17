@@ -37,12 +37,10 @@ const styles: StyleRulesCallback = theme => ({
     fontSize: 14,
     height: 16
   },
-
   selectEmpty: {
     background: '#fff',
     marginTop: theme.spacing.unit * 2
   },
-
   suggestion: {
     display: 'block'
   },
@@ -88,7 +86,6 @@ function renderSuggestion(
 function getSuggestionValue(suggestion: any) {
   return suggestion.label;
 }
-
 function renderSuggestionsContainer(options: any) {
   const { children } = options;
   return (
@@ -97,7 +94,6 @@ function renderSuggestionsContainer(options: any) {
     </Paper>
   );
 }
-
 function getSuggestions(value: any) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
@@ -137,7 +133,7 @@ interface IMatchingSuggestion {
 export namespace SearchItem {
   /* tslint:disable:interface-name */
   export interface IProps {
-    handleInputChange: any;
+    handleFormChange: any;
     classes: any;
     textFieldValue: string;
   }
@@ -161,9 +157,11 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
     return (
       <div>
         <TextField
-          style={{ width: '80%' }}
-          id="itemDescription"
-          name="itemDescription"
+          fullWidth={true}
+          
+          id="name"
+          name="name"
+          onChange={this.props.handleFormChange}
           label="Search"
           value={this.props.textFieldValue}
           InputProps={{
@@ -172,7 +170,7 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
             },
             disableUnderline: false,
             inputRef: ref,
-            onChange: this.handleChange,
+            onChange: this.props.handleFormChange,
             ...other
           }}
         />
@@ -180,13 +178,16 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
     );
   };
 
+  /*
+  * Local Handle Change
+  *
+  */
   public handleChange = (event: any, newVal: any) => {
     /* tslint:disable:no-console */
     const newValue = newVal.newValue;
     this.setState({
       value: newValue
     });
-    // this.props.handleInputChange(event);
   };
 
   public getMatchingItems(value: any) {
@@ -241,6 +242,7 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
   public onSuggestionsFetchRequested = ({ value }: { value: any }) => {
     this.loadSuggestions(value);
   };
+
   // onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
   // onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
   public handleSuggestionsFetchRequested = ({ value }: { value: any }) => {
@@ -257,6 +259,7 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
 
   public render() {
     const { classes } = this.props;
+
     return (
       <Autosuggest
         theme={{
@@ -274,7 +277,7 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
         renderSuggestion={renderSuggestion}
         inputProps={{
           classes,
-          onBlur: this.props.handleInputChange,
+          onBlur: this.props.handleFormChange,
           onChange: this.handleChange,
           value: this.state.value
         }}
