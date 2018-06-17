@@ -14,10 +14,6 @@ import * as Autosuggest from 'react-autosuggest';
 const match = require('autosuggest-highlight/match');
 const parse = require('autosuggest-highlight/parse');
 
-const openfinConfig = {
-  local: 'http://localhost:3000/data/searchSecurities.json'
-};
-
 const suggestions = [{}];
 const styles: StyleRulesCallback = theme => ({
   container: {
@@ -63,8 +59,6 @@ const styles: StyleRulesCallback = theme => ({
     padding: 0
   }
 });
-
-// import { ENV } from '../config/environments';
 
 function renderSuggestion(
   suggestion: any,
@@ -124,12 +118,10 @@ function getSuggestions(value: any) {
       });
 }
 
-// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 function escapeRegexCharacters(str: string) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// define the State
 export interface IState {
   isLoading: boolean;
   suggestions: object[];
@@ -140,10 +132,7 @@ export interface IState {
 interface IMatchingSuggestion {
   label: string;
 }
-// interface IProps {
-//   handleInputChange: any;
-// }
-// namespace used to import props with styles
+
 /* tslint:disable:no-namespace */
 export namespace SearchItem {
   /* tslint:disable:interface-name */
@@ -154,7 +143,6 @@ export namespace SearchItem {
   }
 }
 
-// main class
 class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
   public state = {
     isLoading: false,
@@ -173,7 +161,7 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
     return (
       <div>
         <TextField
-          style={{ width: 240 }}
+          style={{ width: '80%' }}
           id="itemDescription"
           name="itemDescription"
           label="Search"
@@ -194,7 +182,6 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
 
   public handleChange = (event: any, newVal: any) => {
     /* tslint:disable:no-console */
-    console.log(newVal);
     const newValue = newVal.newValue;
     this.setState({
       value: newValue
@@ -216,22 +203,7 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
       { label: 'Jefferies LTD' }
     ];
 
-    fetch(openfinConfig.local)
-      .then(response => {
-        return response.json();
-      })
-      .then((response: string) => {
-        /* tslint:disable:no-console */
-        console.log(response);
-
-        this.setState({
-          itemsJson: response
-        });
-      })
-      .catch(error => {
-        console.error(error);
-        /* tslint:enable:no-console */
-      });
+    // Place fecth() here
 
     const escapedValue = escapeRegexCharacters(value.trim());
 

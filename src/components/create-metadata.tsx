@@ -1,27 +1,29 @@
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 
 import withStyles, {
   StyleRulesCallback,
   WithStyles
 } from '@material-ui/core/styles/withStyles';
+import IThing from '../models/thing';
 
 import * as React from 'react';
 import SearchItem from './search-item';
 
-// const suggestionList: ISuggestionItem[] = [
-//   { label: 'one', value: 'value1' },
-//   { label: 'two', value: 'value2' }
-// ];
-// interface ISuggestionItem {
-//   label: string;
-//   value: any;
-// }
-
 const styles: StyleRulesCallback = theme => ({
+  buttonCancel: {
+    background: '#CCCCD1',
+    color: '#fff'
+  },
+  buttonSubmit: {
+    background: '#008347',
+    color: '#fff'
+  },
   container: {
     background: '#fff',
     fontFamily: 'Roboto',
@@ -46,16 +48,11 @@ const styles: StyleRulesCallback = theme => ({
   }
 });
 
-// define the State
 interface IState {
-  form: {
-    schema: any;
-    name: string;
-    open: boolean;
-  };
+  form: IThing;
+  errors: object;
 }
 
-// namespace used to import props with styles
 /* tslint:disable:no-namespace */
 export namespace CreateMetaData {
   export interface IProps {
@@ -63,13 +60,18 @@ export namespace CreateMetaData {
   }
 }
 
-// main class
 class CreateMetaData extends React.Component<WithStyles<any>, IState> {
   public state: IState = {
+    errors: {},
     form: {
-      name: 'hat',
-      open: true,
-      schema: ''
+      additionalType: '',
+      alternateName: '',
+      description: '',
+      image: '',
+      name: '',
+      sameAs: '',
+      type: "thing",
+      url: ''
     }
   };
 
@@ -80,9 +82,38 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
       this.setState({ form });
     }
   };
+  public cancel = (e: any) => {
+    const form = Object.assign({}, this.state.form);
+    const errors = Object.assign({}, this.state.errors);
+    Object.keys(errors).forEach(error => {
+      errors[error] = false;
+    });
+    Object.keys(form).forEach(item => {
+      form[item] = '';
+    });
+    this.setState({ form, errors });
+    e.preventDefault();
+  };
+
+  public handleSubmit = (event: any) => {
+    let valid = true;
+    const form = Object.assign({}, this.state.form);
+    const errors = Object.assign({}, this.state.errors);
+    Object.keys(errors).forEach(error => {
+      errors[error] = form[error][error] === '';
+      if (errors[error]) {
+        valid = false;
+      }
+    });
+    this.setState({ errors });
+    if (valid) {
+      alert(JSON.stringify(form));
+    }
+    event.preventDefault();
+    return false;
+  };
 
   public render() {
-    // assign this.props.classes to classes
     const { classes } = this.props;
     return (
       <div className={classes.container}>
@@ -101,38 +132,108 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
           </div>
           <div style={{ marginLeft: 7 }}>Create Metadata</div>
         </div>
-        <form className={classes.form} autoComplete="off">
+
+        <form
+          className={classes.form}
+          autoComplete="off"
+          noValidate={true}
+          onSubmit={this.handleSubmit}
+        >
           <Grid className={classes.grid} container={true} spacing={24}>
             <Grid item={true} xs={12} className={classes.gridItem}>
               <div>
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor="schema">Schema</InputLabel>
                   <Select
-                    value={this.state.form.schema}
+                    value={this.state.form.type}
                     onChange={this.handleFormChange}
                     inputProps={{
-                      id: 'schema',
-                      name: 'schema'
+                      id: 'type',
+                      name: 'type'
                     }}
                     style={{ width: 87 }}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Thing</MenuItem>
-                    <MenuItem value={20}>Person</MenuItem>
-                    <MenuItem value={30}>Place</MenuItem>
+                    <MenuItem value="thing">Thing</MenuItem>
+                    <MenuItem value="person">Person</MenuItem>
+                    <MenuItem value="place">Place</MenuItem>
                   </Select>
                 </FormControl>
               </div>
             </Grid>
             <Grid item={true} xs={12} className={classes.gridItem}>
               <div>
-                <SearchItem  textFieldValue={
-                  this.state.form.name || ''
-                }
-                handleInputChange={this.handleFormChange}/>
+                <SearchItem
+                  textFieldValue={this.state.form.name || ''}
+                  handleInputChange={this.handleFormChange}
+                />
               </div>
+            </Grid>
+            <Grid item={true} xs={12} className={classes.griditem}>
+              <TextField
+                style={{ width: '80%' }}
+                id="description"
+                name="description"
+                className={classes.textfield}
+                label="Description"
+                onChange={this.handleFormChange}
+                value={this.state.form.description}
+              />
+            </Grid>
+            <Grid item={true} xs={6} className={classes.griditem}>
+              <TextField
+                id="image"
+                name="image"
+                className={classes.textfield}
+                label="Image"
+                onChange={this.handleFormChange}
+                value={this.state.form.image}
+              />
+            </Grid>
+            <Grid item={true} xs={6} className={classes.griditem}>
+              <TextField
+                id="sameAs"
+                name="sameAs"
+                className={classes.textfield}
+                label="Same As"
+                onChange={this.handleFormChange}
+                value={this.state.form.sameAs}
+              />
+            </Grid>
+            <Grid item={true} xs={6} className={classes.griditem}>
+              <TextField
+                id="alternateName"
+                name="alternateName"
+                className={classes.textfield}
+                label="Alternate Name"
+                onChange={this.handleFormChange}
+                value={this.state.form.alternateName}
+              />
+            </Grid>
+            <Grid item={true} xs={6} className={classes.griditem}>
+              <TextField
+                id="url"
+                name="url"
+                className={classes.textfield}
+                label="URL"
+                onChange={this.handleFormChange}
+                value={this.state.form.url}
+              />
+            </Grid>
+            <Grid
+              item={true}
+              xs={12}
+              className={classes.griditem}
+              style={{ textAlign: 'right' }}
+            >
+              <Button onClick={this.cancel} className={classes.buttonCancel}>
+                CANCEL
+              </Button>&nbsp;&nbsp;
+              <Button className={classes.buttonSubmit} type="submit">
+                SAVE
+              </Button>
             </Grid>
           </Grid>
         </form>
