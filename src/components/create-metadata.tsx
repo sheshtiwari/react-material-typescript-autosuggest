@@ -8,7 +8,19 @@ import withStyles, {
   StyleRulesCallback,
   WithStyles
 } from '@material-ui/core/styles/withStyles';
+
 import * as React from 'react';
+import SearchItem from './search-item';
+
+// const suggestionList: ISuggestionItem[] = [
+//   { label: 'one', value: 'value1' },
+//   { label: 'two', value: 'value2' }
+// ];
+// interface ISuggestionItem {
+//   label: string;
+//   value: any;
+// }
+
 const styles: StyleRulesCallback = theme => ({
   container: {
     background: '#fff',
@@ -75,7 +87,7 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
     return (
       <div className={classes.container}>
         <div className={classes.header}>
-          <div style={{ marginLeft: 7 }}>
+          <div style={{ marginLeft: 0 }}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -115,7 +127,12 @@ class CreateMetaData extends React.Component<WithStyles<any>, IState> {
               </div>
             </Grid>
             <Grid item={true} xs={12} className={classes.gridItem}>
-              <div>Grid Item 2</div>
+              <div>
+                <SearchItem  textFieldValue={
+                  this.state.form.name || ''
+                }
+                handleInputChange={this.handleFormChange}/>
+              </div>
             </Grid>
           </Grid>
         </form>
