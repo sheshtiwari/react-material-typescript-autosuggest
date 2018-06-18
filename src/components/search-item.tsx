@@ -120,6 +120,7 @@ function escapeRegexCharacters(str: string) {
 
 export interface IState {
   isLoading: boolean;
+  formCreated: number;
   suggestions: object[];
   value: string;
   securitiesJson: string;
@@ -135,13 +136,15 @@ export namespace SearchItem {
   export interface IProps {
     handleFormChange: any;
     classes: any;
-    textFieldValue: string;
+    formCreated: number;
   }
 }
 
 class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
   public state = {
+    formCreated: +new Date(),
     isLoading: false,
+
     securitiesJson: '',
     suggestions,
     value: ''
@@ -151,6 +154,7 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
   constructor(props: SearchItem.IProps) {
     super(props);
   }
+
   public renderInput = (inputProps: any) => {
     const { classes, ref, ...other } = inputProps;
 
@@ -158,15 +162,13 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
       <div>
         <TextField
           fullWidth={true}
-          
           id="name"
           name="name"
           onChange={this.props.handleFormChange}
           label="Search"
-          value={this.props.textFieldValue}
           InputProps={{
             classes: {
-              input: classes.input
+              input: classes.textfield
             },
             disableUnderline: false,
             inputRef: ref,
@@ -256,6 +258,12 @@ class SearchItem extends React.Component<WithStyles<any> & SearchItem.IProps> {
       suggestions: []
     });
   };
+
+  public componentDidUpdate(prevProps: any) {
+    if (this.props.formCreated > this.state.formCreated) {
+      this.setState({ value: '', formCreated: this.props.formCreated });
+    }
+  }
 
   public render() {
     const { classes } = this.props;
